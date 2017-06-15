@@ -1,5 +1,6 @@
 package com.silence.mymusic.utils;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -53,6 +54,10 @@ public class ImgLoadUtil {
             }
         }
         return instance;
+    }
+
+    public static void CommonLoadImage(Context context, int resId, ImageView imageView) {
+        Glide.with(context).load(resId).into(imageView);
     }
 
     public static void displayRandom(int imgNumber, ImageView imageView) {
