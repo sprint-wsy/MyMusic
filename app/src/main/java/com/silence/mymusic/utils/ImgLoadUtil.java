@@ -45,16 +45,16 @@ public class ImgLoadUtil {
         randomSix = new Random().nextInt(homeSix.length);
     }
 
-    public static ImgLoadUtil getInstance() {
-        if (instance == null) {
-            synchronized (ImgLoadUtil.class) {
-                if (instance == null) {
-                    instance = new ImgLoadUtil();
-                }
-            }
-        }
-        return instance;
-    }
+//    public static ImgLoadUtil getInstance() {
+//        if (instance == null) {
+//            synchronized (ImgLoadUtil.class) {
+//                if (instance == null) {
+//                    instance = new ImgLoadUtil();
+//                }
+//            }
+//        }
+//        return instance;
+//    }
 
     public static void CommonLoadImage(Context context, int resId, ImageView imageView) {
         Glide.with(context).load(resId).into(imageView);
