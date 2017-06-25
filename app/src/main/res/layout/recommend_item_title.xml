@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="27dp"
+    android:layout_marginBottom="10dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -10,7 +12,7 @@
         android:layout_height="22dp"
         android:layout_gravity="bottom"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/home_title_android" />
+        android:src="@drawable/home_title_android"/>
 
     <TextView
         android:id="@+id/text_title_type"
@@ -20,7 +22,7 @@
         android:layout_marginLeft="2dp"
         android:text="福利"
         android:textColor="@color/colorContent"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 
     <LinearLayout
@@ -37,12 +39,12 @@
             android:layout_height="wrap_content"
             android:text="更多"
             android:textColor="@color/colorTabText"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
-            android:src="@drawable/home_arrow_right" />
+            android:src="@drawable/home_arrow_right"/>
     </LinearLayout>
 
 </LinearLayout>
