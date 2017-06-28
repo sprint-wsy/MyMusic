@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.silence.mymusic.R;
 import com.silence.mymusic.bean.ItemBean;
+import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.CommonUtils;
 import com.silence.mymusic.utils.ImgLoadUtil;
 
@@ -155,6 +157,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ((OneHolder)holder).mTextView.setText(desc);
                 ImgLoadUtil.displayRandom(1, ((OneHolder)holder).mImageView);
             }
+            setOnClick(((OneHolder)holder).mLayout, mItemBeanList.get(dataPosition).get(0));
         } else if (getItemViewType(position) == TYPE_TWO) {
             String desc1 = mItemBeanList.get(dataPosition).get(0).getDesc();
             String desc2 = mItemBeanList.get(dataPosition).get(1).getDesc();
@@ -162,6 +165,8 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((TwoHolder)holder).mTextView2.setText(desc2);
             ImgLoadUtil.displayRandom(2, ((TwoHolder)holder).mImageView1);
             ImgLoadUtil.displayRandom(2, ((TwoHolder)holder).mImageView2);
+            setOnClick(((TwoHolder)holder).mLayout1, mItemBeanList.get(dataPosition).get(0));
+            setOnClick(((TwoHolder)holder).mLayout2, mItemBeanList.get(dataPosition).get(1));
         } else if (getItemViewType(position) == TYPE_THREE) {
             String desc1 = mItemBeanList.get(dataPosition).get(0).getDesc();
             String desc2 = mItemBeanList.get(dataPosition).get(1).getDesc();
@@ -172,6 +177,9 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ImgLoadUtil.displayRandom(3, ((ThreeHolder)holder).mImageView1);
             ImgLoadUtil.displayRandom(3, ((ThreeHolder)holder).mImageView2);
             ImgLoadUtil.displayRandom(3, ((ThreeHolder)holder).mImageView3);
+            setOnClick(((ThreeHolder)holder).mLayout1, mItemBeanList.get(dataPosition).get(0));
+            setOnClick(((ThreeHolder)holder).mLayout2, mItemBeanList.get(dataPosition).get(1));
+            setOnClick(((ThreeHolder)holder).mLayout3, mItemBeanList.get(dataPosition).get(2));
         }
 
     }
@@ -185,6 +193,15 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         } else {
             return mItemBeanList.size() + 1;
         }
+    }
+
+    private void setOnClick(LinearLayout linearLayout, final ItemBean itemBean) {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebViewActivity.loadUrl(v.getContext(), itemBean.getUrl(), "加载中...");
+            }
+        });
     }
 
     private class HeaderHolder extends RecyclerView.ViewHolder {
@@ -214,24 +231,27 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private class OneHolder extends RecyclerView.ViewHolder {
-
+        LinearLayout mLayout;
         ImageView mImageView;
         TextView mTextView;
 
         public OneHolder(View itemView) {
             super(itemView);
+            mLayout = (LinearLayout) itemView.findViewById(R.id.layout_item_one);
             mImageView = (ImageView) itemView.findViewById(R.id.image_one_photo);
             mTextView = (TextView) itemView.findViewById(R.id.text_one_photo_title);
         }
     }
 
     private class TwoHolder extends RecyclerView.ViewHolder {
-
+        LinearLayout mLayout1, mLayout2;
         ImageView mImageView1, mImageView2;
         TextView mTextView1, mTextView2;
 
         public TwoHolder(View itemView) {
             super(itemView);
+            mLayout1 = (LinearLayout) itemView.findViewById(R.id.layout_two_first);
+            mLayout2 = (LinearLayout) itemView.findViewById(R.id.layout_two_second);
             mImageView1 = (ImageView) itemView.findViewById(R.id.image_two_first);
             mTextView1 = (TextView) itemView.findViewById(R.id.text_two_first_title);
             mImageView2 = (ImageView) itemView.findViewById(R.id.image_two_second);
@@ -240,12 +260,15 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private class ThreeHolder extends RecyclerView.ViewHolder {
-
+        LinearLayout mLayout1, mLayout2, mLayout3;
         ImageView mImageView1, mImageView2, mImageView3;
         TextView mTextView1, mTextView2, mTextView3;
 
         public ThreeHolder(View itemView) {
             super(itemView);
+            mLayout1 = (LinearLayout) itemView.findViewById(R.id.layout_three_first);
+            mLayout2 = (LinearLayout) itemView.findViewById(R.id.layout_three_second);
+            mLayout3 = (LinearLayout) itemView.findViewById(R.id.layout_three_third);
             mImageView1 = (ImageView) itemView.findViewById(R.id.image_three_first);
             mTextView1 = (TextView) itemView.findViewById(R.id.text_three_first_title);
             mImageView2 = (ImageView) itemView.findViewById(R.id.image_three_second);
