@@ -82,7 +82,7 @@ public class ImgLoadUtil {
         }
     }
 
-    private static int getRandomPic(int imgNumber) {
+    public static int getRandomPic(int imgNumber) {
         switch (imgNumber) {
             case 1:
                 randomOne ++;

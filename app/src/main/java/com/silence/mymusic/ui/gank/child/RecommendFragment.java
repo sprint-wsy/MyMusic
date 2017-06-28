@@ -14,9 +14,12 @@ import com.silence.mymusic.base.BaseFragment;
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
 import com.silence.mymusic.bean.ItemBean;
+import com.silence.mymusic.utils.BannerImageLoader;
 import com.silence.mymusic.utils.DebugUtil;
+import com.silence.mymusic.utils.ImgLoadUtil;
 import com.silence.mymusic.utils.http.HttpUtils;
 import com.silence.mymusic.utils.http.RetrofitClient;
+import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,8 @@ public class RecommendFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private LinearLayout mLoadingLayout;
+    private View mHeaderView;
+    private Banner mBanner;
     private RecommendRecycleViewAdapter mRecycleViewAdapter;
 
     private List<List<ItemBean>> mDataLists;
@@ -42,23 +47,9 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_recommend);
-        mLoadingLayout = (LinearLayout) getView().findViewById(R.id.layout_loading);
         initRecycleView();
+        loadBanner();
         showData();
-//        Call<GankIoDataBean> call = HttpUtils.getInstance().getGankIoData("Android", 10, 1);
-//        call.enqueue(new Callback<GankIoDataBean>() {
-//            @Override
-//            public void onResponse(Call<GankIoDataBean> call, Response<GankIoDataBean> response) {
-//                String s = response.body().toString();
-//                DebugUtil.i(s);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<GankIoDataBean> call, Throwable t) {
-//                DebugUtil.i("error");
-//            }
-//        });
     }
 
     @Override
@@ -67,15 +58,34 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void initRecycleView() {
-//        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-//        mRecyclerView.setLayoutManager(manager);
-//        List<List<ItemBean>> items = new ArrayList<>(0);
-//        mRecycleViewAdapter = new RecommendRecycleViewAdapter(items);
-//        mRecycleViewAdapter.setHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null));
-//        mRecyclerView.setAdapter(mRecycleViewAdapter);
-//        mLoadingLayout.setVisibility(View.GONE);
-//        mRecyclerView.setVisibility(View.VISIBLE);
-//        showContentView();
+        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_recommend);
+        mLoadingLayout = (LinearLayout) getView().findViewById(R.id.layout_loading);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
+        List<List<ItemBean>> items = new ArrayList<>(0);
+        mRecycleViewAdapter = new RecommendRecycleViewAdapter(items);
+        mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null);
+        mRecycleViewAdapter.setHeaderView(mHeaderView);
+        mRecyclerView.setAdapter(mRecycleViewAdapter);
+        mLoadingLayout.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        showContentView();
+    }
+
+    /**
+     * 加载轮播图
+     */
+    private void loadBanner() {
+        mBanner = (Banner) mHeaderView.findViewById(R.id.banner);
+        mBanner.setImageLoader(new BannerImageLoader());
+        ArrayList<Integer> imageList = new ArrayList<Integer>();
+        for (int i = 0; i < 5; i++) {
+            imageList.add(ImgLoadUtil.getRandomPic(1));
+        }
+        mBanner.setImages(imageList);
+        mBanner.isAutoPlay(false);
+//        mBanner.setDelayTime(5000);
+        mBanner.start();
     }
 
     private void showData() {
@@ -111,14 +121,8 @@ public class RecommendFragment extends BaseFragment {
                 if (results.getApp() != null && results.getApp().size() > 0) {
                     addList(results.getApp(), "App");
                 }
-                LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(manager);
-                mRecycleViewAdapter = new RecommendRecycleViewAdapter(mDataLists);
-                mRecycleViewAdapter.setHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null));
-                mRecyclerView.setAdapter(mRecycleViewAdapter);
-                mLoadingLayout.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                showContentView();
+                mRecycleViewAdapter.setData(mDataLists);
+                mRecycleViewAdapter.notifyDataSetChanged();
             }
 
             @Override
