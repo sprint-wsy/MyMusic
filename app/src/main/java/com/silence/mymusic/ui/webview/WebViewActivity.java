@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
@@ -154,6 +156,48 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
         mWebView.loadUrl(mUrl);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mWebView.canGoBack()) {
+                mWebView.goBack();
+                return true;
+            } else {
+                mWebView.loadUrl("about:blank");
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+        mWebView.resumeTimers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mWebView != null) {
+            ((ViewGroup)mWebView.getParent()).removeView(mWebView);
+            mWebView.removeAllViews();
+            mWebView.loadUrl("about:blank");
+            mWebView.stopLoading();
+            mWebView.setWebViewClient(null);
+            mWebView.setWebChromeClient(null);
+            mWebView.destroy();
+            mWebView = null;
+        }
+        super.onDestroy();
     }
 
     public static void loadUrl(Context context, String url, String title) {

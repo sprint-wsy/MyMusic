@@ -41,6 +41,7 @@ public class RecommendFragment extends BaseFragment {
     private View mHeaderView;
     private Banner mBanner;
     private RecommendRecycleViewAdapter mRecycleViewAdapter;
+    private boolean mIsPrepared = false;
 
     private List<List<ItemBean>> mDataLists;
 
@@ -48,6 +49,8 @@ public class RecommendFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initRecycleView();
+//        mIsPrepared = true;
+//        loadData();
         loadBanner();
         showData();
     }
@@ -55,6 +58,25 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public int setContent() {
         return R.layout.fragment_recommend;
+    }
+
+//    @Override
+//    protected void loadData() {
+//        super.loadData();
+//        if (!mIsVisible || !mIsPrepared) {
+//            return;
+//        }
+//        loadBanner();
+//        showData();
+//    }
+
+    @Override
+    protected void onRefresh() {
+        super.onRefresh();
+        showContentView();
+        showRecommendLoading(true);
+        loadBanner();
+        showData();
     }
 
     private void initRecycleView() {
@@ -67,9 +89,18 @@ public class RecommendFragment extends BaseFragment {
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null);
         mRecycleViewAdapter.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
-        mLoadingLayout.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        showRecommendLoading(false);
         showContentView();
+    }
+
+    private void showRecommendLoading(boolean isLoading) {
+        if (isLoading) {
+            mLoadingLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        } else {
+            mLoadingLayout.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -123,10 +154,12 @@ public class RecommendFragment extends BaseFragment {
                 }
                 mRecycleViewAdapter.setData(mDataLists);
                 mRecycleViewAdapter.notifyDataSetChanged();
+                showRecommendLoading(false);
             }
 
             @Override
             public void onFailure(Call<GankIoDayBean> call, Throwable t) {
+                showError();
                 DebugUtil.i("get gank day error");
             }
         });
