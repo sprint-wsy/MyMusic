@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -30,8 +31,12 @@ import retrofit2.Response;
 public class WelfareFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
+    private View mFooterView;
     private WelfareRecycleViewAdapter mRecycleViewAdapter;
+    private StaggeredGridLayoutManager mLayoutManager;
     private List<GankIoDataBean.ResultBean> mDataList;
+    private int mPage = 1;
+    private int mLastVisibleItem;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -54,20 +59,40 @@ public class WelfareFragment extends BaseFragment {
 
     private void initView() {
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_welfare);
+        mFooterView = LayoutInflater.from(getActivity()).inflate(R.layout.gank_item_footer, null, false);
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mDataList = new ArrayList<GankIoDataBean.ResultBean>();
         mRecycleViewAdapter = new WelfareRecycleViewAdapter(mDataList);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mRecycleViewAdapter.setFooterView(mFooterView);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
+        //到底部自动加载更多
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 ==
+                        mRecycleViewAdapter.getItemCount()) {
+                    mPage ++;
+                    loadWelfareData();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mLastVisibleItem = mLayoutManager.findLastCompletelyVisibleItemPositions(null)[0];
+            }
+        });
     }
 
     private void loadWelfareData() {
-        Call<GankIoDataBean> call = HttpUtils.getInstance().getGankIoData("福利", 20, 1);
+        Call<GankIoDataBean> call = HttpUtils.getInstance().getGankIoData("福利", 20, mPage);
         call.enqueue(new Callback<GankIoDataBean>() {
             @Override
             public void onResponse(Call<GankIoDataBean> call, Response<GankIoDataBean> response) {
                 List<GankIoDataBean.ResultBean> list = response.body().getResults();
                 mRecycleViewAdapter.addData(list);
-                mRecycleViewAdapter.notifyDataSetChanged();
                 showContentView();
             }
 
