@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.silence.mymusic.R;
+import com.silence.mymusic.utils.DebugUtil;
 
 /**
  * Created by wushiyu on 2017/6/28.
@@ -126,12 +127,18 @@ public class WebViewActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                mProgressBar.setVisibility(View.GONE);
             }
         });
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
+                DebugUtil.i("web progress " + newProgress);
+                mProgressBar.setProgress(newProgress);
+                if (newProgress == 100 ) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
