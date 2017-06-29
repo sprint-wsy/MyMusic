@@ -63,13 +63,22 @@ public class ImgLoadUtil {
     public static void displayRandom(int imgNumber, ImageView imageView) {
         Glide.with(imageView.getContext())
                 .load(getRandomPic(imgNumber))
-                .placeholder(getDefaulPic(imgNumber))
-                .error(getDefaulPic(imgNumber))
+                .placeholder(getDefaultPic(imgNumber))
+                .error(getDefaultPic(imgNumber))
                 .crossFade(1500)
                 .into(imageView);
     }
 
-    private static int getDefaulPic(int imgNumber) {
+    public static void displayWelfare(String url, ImageView imageView) {
+        Glide.with(imageView.getContext())
+                .load(url)
+                .placeholder(R.drawable.img_default_meizi)
+                .error(R.drawable.img_default_meizi)
+                .crossFade(500)
+                .into(imageView);
+    }
+
+    private static int getDefaultPic(int imgNumber) {
         switch (imgNumber) {
             case 1:
                 return R.drawable.img_two_bi_one;

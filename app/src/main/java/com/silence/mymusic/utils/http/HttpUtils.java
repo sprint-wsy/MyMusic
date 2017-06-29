@@ -37,7 +37,7 @@ public class HttpUtils {
 
 
     public Call<GankIoDataBean> getGankIoData(String type, int count, int page) {
-        Call<GankIoDataBean> call = sGankRetrofitClient.getGankIoData(type, count, count);
+        Call<GankIoDataBean> call = sGankRetrofitClient.getGankIoData(type, count, page);
         return call;
     }
 

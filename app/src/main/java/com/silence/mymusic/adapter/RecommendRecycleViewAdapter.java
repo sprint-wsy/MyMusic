@@ -219,7 +219,6 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private class TitleHolder extends RecyclerView.ViewHolder {
-
         ImageView mTitleImage;
         TextView mTitleText;
 
