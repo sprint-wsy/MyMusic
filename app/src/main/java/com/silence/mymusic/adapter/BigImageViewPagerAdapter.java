@@ -8,14 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.bm.library.Info;
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.silence.mymusic.R;
-import com.silence.mymusic.utils.ImgLoadUtil;
 import com.silence.mymusic.utils.ToastUtil;
 
 import java.util.List;

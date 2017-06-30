@@ -1,16 +1,33 @@
 package com.silence.mymusic.ui.gank;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.silence.mymusic.R;
 import com.silence.mymusic.adapter.BigImageViewPagerAdapter;
+import com.silence.mymusic.utils.ToastUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by wushiyu on 2017/6/30.
@@ -46,6 +63,32 @@ public class BigImageActivity extends AppCompatActivity implements ViewPager.OnP
         mViewPager.setCurrentItem(mIndex);
         mViewPager.setOnPageChangeListener(this);
         mTextIndex.setText((mIndex + 1) + " / " + mCounts);
+        mTextSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.showToast("开始下载图片");
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String imagePath = getImagePath(mImageUrls.get(mIndex));
+                        if (!TextUtils.isEmpty(imagePath)) {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                            if (bitmap != null) {
+                                saveImage(bitmap);
+                                BigImageActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastUtil.showToast("保存成功");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+            }
+        });
     }
 
     private void getIntentData() {
@@ -56,6 +99,50 @@ public class BigImageActivity extends AppCompatActivity implements ViewPager.OnP
         mCounts = mImageUrls.size();
     }
 
+    private void saveImage(Bitmap bitmap) {
+        File dir = new File(Environment.getExternalStorageDirectory(), "云Music");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(dir, fileName);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Glide 获得图片缓存路径
+     */
+    private String getImagePath(String url) {
+        String path  = null;
+        FutureTarget<File> future = Glide.with(BigImageActivity.this)
+                .load(url)
+                .downloadOnly(500, 500);
+        try {
+            File cacheFile = future.get();
+            path = cacheFile.getAbsolutePath();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return path;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.push_fade_out, R.anim.push_fade_in);
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
