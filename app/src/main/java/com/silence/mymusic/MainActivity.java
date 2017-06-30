@@ -1,5 +1,6 @@
 package com.silence.mymusic;
 
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import com.silence.mymusic.adapter.MyFragmentPagerAdapter;
 import com.silence.mymusic.ui.book.BookFragment;
 import com.silence.mymusic.ui.gank.GankFragment;
 import com.silence.mymusic.ui.movie.MovieFragment;
+import com.silence.mymusic.utils.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
+
+    private Handler mHandler = new Handler();
+    private boolean isRealyExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,4 +137,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isRealyExit) {
+            finish();
+        } else {
+            isRealyExit = true;
+            ToastUtil.showToast("再按一次退出");
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isRealyExit = false;
+                }
+            }, 3000);
+        }
+
+    }
 }
