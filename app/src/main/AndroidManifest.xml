@@ -28,8 +28,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.webview.WebViewActivity">
-        </activity>
+        <activity android:name=".ui.webview.WebViewActivity" />
+
+        <activity
+            android:name=".ui.gank.BigImageActivity"
+            android:theme="@style/ViewBigPicTheme"/>
     </application>
 
 </manifest>

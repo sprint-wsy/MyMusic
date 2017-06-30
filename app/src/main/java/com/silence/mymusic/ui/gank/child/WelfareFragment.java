@@ -62,7 +62,7 @@ public class WelfareFragment extends BaseFragment {
         mFooterView = LayoutInflater.from(getActivity()).inflate(R.layout.gank_item_footer, null, false);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mDataList = new ArrayList<GankIoDataBean.ResultBean>();
-        mRecycleViewAdapter = new WelfareRecycleViewAdapter(mDataList);
+        mRecycleViewAdapter = new WelfareRecycleViewAdapter(getContext(), mDataList);
         mRecycleViewAdapter.setFooterView(mFooterView);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
@@ -99,6 +99,7 @@ public class WelfareFragment extends BaseFragment {
             @Override
             public void onFailure(Call<GankIoDataBean> call, Throwable t) {
                 DebugUtil.i("welfare failure");
+                mPage = 1;
                 showError();
             }
         });
