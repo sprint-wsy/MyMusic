@@ -66,7 +66,6 @@ public class BigImageActivity extends AppCompatActivity implements ViewPager.OnP
         mTextSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.showToast("开始下载图片");
 
                 new Thread(new Runnable() {
                     @Override

@@ -78,6 +78,18 @@ public class ImgLoadUtil {
                 .into(imageView);
     }
 
+    /**
+     * 用于干货item，将gif图转换为静态图
+     */
+    public static void displayGif (String url, ImageView imageView) {
+        Glide.with(imageView.getContext())
+                .load(url)
+                .asBitmap()
+                .placeholder(R.drawable.img_one_bi_one)
+                .error(R.drawable.img_one_bi_one)
+                .into(imageView);
+    }
+
     private static int getDefaultPic(int imgNumber) {
         switch (imgNumber) {
             case 1:
