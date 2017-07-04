@@ -4,11 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ListHolder;
+import com.orhanobut.dialogplus.OnItemClickListener;
 import com.silence.mymusic.R;
 import com.silence.mymusic.adapter.CustomRecycleViewAdapter;
+import com.silence.mymusic.adapter.DialogAdapter;
 import com.silence.mymusic.base.BaseFragment;
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.utils.http.HttpUtils;
@@ -28,6 +35,8 @@ public class CustomFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private View mHeaderView;
+    private TextView mHeaderName;
+    private LinearLayout mHeaderChoose;
     private CustomRecycleViewAdapter mAdapter;
     private List<GankIoDataBean.ResultBean> mDataList;
     private int mPage = 1;
@@ -37,7 +46,7 @@ public class CustomFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        loadCustomData();
+        loadCustomData(false);
     }
 
     @Override
@@ -49,12 +58,12 @@ public class CustomFragment extends BaseFragment {
     protected void onRefresh() {
         super.onRefresh();
         showLoading();
-        loadCustomData();
+        loadCustomData(false);
     }
 
     private void initView() {
+        initHeader();
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_custom);
-        mHeaderView = LayoutInflater.from(getContext()).inflate(R.layout.custom_header, null, false);
         mDataList = new ArrayList<GankIoDataBean.ResultBean>();
         mAdapter = new CustomRecycleViewAdapter(getContext(), mDataList);
         mAdapter.setHeader(mHeaderView);
@@ -63,19 +72,67 @@ public class CustomFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void loadCustomData() {
+    private void initHeader() {
+        mHeaderView = LayoutInflater.from(getContext()).inflate(R.layout.custom_header, null, false);
+        mHeaderName = (TextView) mHeaderView.findViewById(R.id.text_name);
+        mHeaderChoose = (LinearLayout) mHeaderView.findViewById(R.id.layout_choose_category);
+        mHeaderChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+    }
+
+    private void showDialog() {
+        DialogAdapter adapter = new DialogAdapter();
+        DialogPlus dialog = DialogPlus.newDialog(getContext())
+                .setContentHolder(new ListHolder())
+                .setGravity(Gravity.BOTTOM)
+                .setAdapter(adapter)
+                .setHeader(R.layout.custom_dialog_header)
+                .setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                        mHeaderName.setText(item.toString());
+                        if ("全部".equals(item.toString())) {
+                            mType = "all";
+                        } else {
+                            mType = item.toString();
+                        }
+                        dialog.dismiss();
+                        showLoading();
+                        loadCustomData(false);
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+
+    /**
+     *
+     * @param isLoadMore 是通过上拉加载更多，还是选择分类后重新加载
+     */
+    private void loadCustomData(final boolean isLoadMore) {
         Call<GankIoDataBean> call = HttpUtils.getInstance().getGankIoData(mType, 20, mPage);
         call.enqueue(new Callback<GankIoDataBean>() {
             @Override
             public void onResponse(Call<GankIoDataBean> call, Response<GankIoDataBean> response) {
-                mAdapter.addData(response.body().getResults());
+                if (isLoadMore) {
+                    mAdapter.addData(response.body().getResults());
+                } else {
+                    mAdapter.setData(response.body().getResults());
+                }
                 showContentView();
             }
 
             @Override
             public void onFailure(Call<GankIoDataBean> call, Throwable t) {
-                onRefresh();
+                showError();
             }
         });
     }
+
+
 }

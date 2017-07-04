@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.silence.mymusic.R;
 import com.silence.mymusic.bean.GankIoDataBean;
+import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.ImgLoadUtil;
 
 import java.util.List;
@@ -41,6 +42,12 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
     }
 
     public void addData(List<GankIoDataBean.ResultBean> data) {
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<GankIoDataBean.ResultBean> data) {
+        mData.clear();
         mData.addAll(data);
         notifyDataSetChanged();
     }
@@ -79,7 +86,7 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
             dataPosition --;
         }
 
-        GankIoDataBean.ResultBean data = mData.get(dataPosition);
+        final GankIoDataBean.ResultBean data = mData.get(dataPosition);
 
         if ("福利".equals(data.getType())) {
             ((CustomHolder)holder).mLayoutNoWelfare.setVisibility(View.GONE);
@@ -111,7 +118,12 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
         }
 
         ((CustomHolder)holder).mTextDesc.setText(data.getDesc());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebViewActivity.loadUrl(mContext, data.getUrl(), "加载中...");
+            }
+        });
 
     }
 
