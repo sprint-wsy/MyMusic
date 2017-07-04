@@ -35,12 +35,15 @@ public class CustomFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private View mHeaderView;
+    private View mFooterView;
     private TextView mHeaderName;
     private LinearLayout mHeaderChoose;
     private CustomRecycleViewAdapter mAdapter;
     private List<GankIoDataBean.ResultBean> mDataList;
     private int mPage = 1;
     private String mType = "all";
+    private LinearLayoutManager mLayoutManager;
+    private int mLastVisibleItem;  //用于上拉刷新
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -65,11 +68,30 @@ public class CustomFragment extends BaseFragment {
         initHeader();
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_custom);
         mDataList = new ArrayList<GankIoDataBean.ResultBean>();
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new CustomRecycleViewAdapter(getContext(), mDataList);
         mAdapter.setHeader(mHeaderView);
-        mAdapter.setAllType(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.gank_item_footer, mRecyclerView, false);
+        mAdapter.setFooter(mFooterView);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 ==
+                        mAdapter.getItemCount()) {
+                    mPage ++;
+                    loadCustomData(true);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mLastVisibleItem = mLayoutManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
     }
 
     private void initHeader() {
@@ -130,6 +152,11 @@ public class CustomFragment extends BaseFragment {
             @Override
             public void onFailure(Call<GankIoDataBean> call, Throwable t) {
                 showError();
+                if (isLoadMore) {
+                    mPage --;
+                } else {
+                    mPage = 1;
+                }
             }
         });
     }

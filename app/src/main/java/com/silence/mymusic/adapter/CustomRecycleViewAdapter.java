@@ -25,11 +25,11 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
 
     public static final int TYPE_HEADER = 1001;
     public static final int TYPE_NORMAL = 1002;
+    public static final int TYPE_FOOTER = 1003;
 
-    private View mHeader;
+    private View mHeader, mFooter;
     private List<GankIoDataBean.ResultBean> mData;
     private Context mContext;
-    private boolean mIsAllType;
 
     public CustomRecycleViewAdapter(Context context, List<GankIoDataBean.ResultBean> data) {
         super();
@@ -39,6 +39,10 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
 
     public void setHeader(View view) {
         mHeader = view;
+    }
+
+    public void setFooter(View view) {
+        mFooter = view;
     }
 
     public void addData(List<GankIoDataBean.ResultBean> data) {
@@ -52,14 +56,13 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void setAllType(boolean isAllType) {
-        mIsAllType = isAllType;
-    }
-
     @Override
     public int getItemViewType(int position) {
         if (mHeader != null && position == 0) {
             return TYPE_HEADER;
+        }
+        if (mFooter != null && position == (getItemCount() - 1)) {
+            return TYPE_FOOTER;
         }
         return TYPE_NORMAL;
     }
@@ -68,6 +71,9 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             return new CustomHeaderHolder(mHeader);
+        }
+        if (viewType == TYPE_FOOTER) {
+            return new CustomFooterHolder(mFooter);
         }
         if (viewType == TYPE_NORMAL) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.custom_item, parent, false);
@@ -78,7 +84,7 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_HEADER) {
+        if (getItemViewType(position) == TYPE_HEADER || getItemViewType(position) == TYPE_FOOTER) {
             return;
         }
         int dataPosition = position;
@@ -97,13 +103,6 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
             ((CustomHolder)holder).mImageWelfare.setVisibility(View.GONE);
         }
 
-        if (mIsAllType) {
-            ((CustomHolder)holder).mTextType.setVisibility(View.VISIBLE);
-            ((CustomHolder)holder).mTextType.setText("  ·  " + data.getType());
-        } else {
-            ((CustomHolder)holder).mTextType.setVisibility(View.GONE);
-        }
-
         if (data.getImages() != null && data.getImages().size() > 0) {
             ((CustomHolder)holder).mImagePic.setVisibility(View.VISIBLE);
             ImgLoadUtil.displayGif(data.getImages().get(0), ((CustomHolder)holder).mImagePic);
@@ -116,7 +115,7 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
         } else {
             ((CustomHolder)holder).mTextWho.setText(data.getWho());
         }
-
+        ((CustomHolder)holder).mTextType.setText("  ·  " + data.getType());
         ((CustomHolder)holder).mTextDesc.setText(data.getDesc());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,8 +128,10 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if (mHeader == null) {
+        if (mHeader == null && mFooter == null) {
             return mData.size();
+        } else if (mHeader != null && mFooter != null) {
+            return mData.size() + 2;
         }
         return mData.size() + 1;
     }
@@ -153,13 +154,15 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter {
     }
 
     private class CustomHeaderHolder extends RecyclerView.ViewHolder {
-        TextView mTextName;
-        LinearLayout mLayoutChoose;
-
         public CustomHeaderHolder(View itemView) {
             super(itemView);
-            mTextName = (TextView) itemView.findViewById(R.id.text_name);
-            mLayoutChoose = (LinearLayout) itemView.findViewById(R.id.layout_choose_category);
+        }
+    }
+
+    private class CustomFooterHolder extends RecyclerView.ViewHolder {
+
+        public CustomFooterHolder(View itemView) {
+            super(itemView);
         }
     }
 }
