@@ -17,10 +17,12 @@ import com.silence.mymusic.base.BaseFragment;
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
 import com.silence.mymusic.bean.ItemBean;
+import com.silence.mymusic.ui.gank.GankFragment;
 import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.BannerImageLoader;
 import com.silence.mymusic.utils.DebugUtil;
 import com.silence.mymusic.utils.ImgLoadUtil;
+import com.silence.mymusic.utils.TimeUtil;
 import com.silence.mymusic.utils.http.HttpUtils;
 import com.silence.mymusic.utils.http.RetrofitClient;
 import com.youth.banner.Banner;
@@ -95,7 +97,7 @@ public class RecommendFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         List<List<ItemBean>> items = new ArrayList<>(0);
-        mRecycleViewAdapter = new RecommendRecycleViewAdapter(items);
+        mRecycleViewAdapter = new RecommendRecycleViewAdapter(this, items);
         mRecycleViewAdapter.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
         showRecommendLoading(false);
@@ -108,13 +110,23 @@ public class RecommendFragment extends BaseFragment {
         mButtonDaily = (ImageView) mHeaderView.findViewById(R.id.button_daily);
         mButtonMovieHot = (ImageButton) mHeaderView.findViewById(R.id.button_movie_hot);
         mTextDaily = (TextView) mHeaderView.findViewById(R.id.text_daily);
-        mButtonMovieHot.setOnClickListener(new View.OnClickListener() {
+        mTextDaily.setText(TimeUtil.getTodayDateList().get(2));
+        mButtonFreeRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WebViewActivity.loadUrl(getContext(), URL_FREE_READ,"加载中...");
             }
         });
+        mButtonDaily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jumpGankFragment(2);
+            }
+        });
+    }
 
+    public void jumpGankFragment(int position) {
+        ((GankFragment)getParentFragment()).jumpGankFragment(position);
     }
 
     private void showRecommendLoading(boolean isLoading) {

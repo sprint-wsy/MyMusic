@@ -65,7 +65,7 @@ public class GankFragment extends BaseFragment {
         mFragmentList.add(new AndroidFragment());
     }
 
-    public void jumpFragment(int position) {
+    public void jumpGankFragment(int position) {
         mViewPager.setCurrentItem(position, true);
     }
 }

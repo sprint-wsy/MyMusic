@@ -62,11 +62,25 @@ public class TimeUtil {
     /**
      * 获取当前日期
      */
-    public static String getDate() {
+    public static String getTodayDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(new Date());
         return date;
     }
+
+    public static ArrayList<String> getTodayDateList() {
+        String data = getTodayDate();
+        String[] split = data.split("-");
+        String year = split[0];
+        String month = split[1];
+        String day = split[2];
+        ArrayList<String> list = new ArrayList<>();
+        list.add(year);
+        list.add(month);
+        list.add(day);
+        return list;
+    }
+
 
     /**
      * 获取当前时间是否大于12：30

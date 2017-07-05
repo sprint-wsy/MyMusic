@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.silence.mymusic.R;
 import com.silence.mymusic.bean.ItemBean;
+import com.silence.mymusic.ui.gank.child.RecommendFragment;
 import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.CommonUtils;
 import com.silence.mymusic.utils.ImgLoadUtil;
@@ -26,9 +27,11 @@ import java.util.List;
 public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<List<ItemBean>> mItemBeanList;
+    private RecommendFragment mRecommendFragment;
 
-    public RecommendRecycleViewAdapter(List<List<ItemBean>> list) {
+    public RecommendRecycleViewAdapter(RecommendFragment fragment, List<List<ItemBean>> list) {
         super();
+        mRecommendFragment = fragment;
         mItemBeanList = (ArrayList<List<ItemBean>>) list;
     }
 
@@ -125,20 +128,28 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((TitleHolder) holder).mTitleText.setText(title);
             if ("Android".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_android));
+                setOnClick(holder.itemView, 3);
             } else if ("福利".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_meizi));
+                setOnClick(holder.itemView, 1);
             } else if ("IOS".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_ios));
+                setOnClick(holder.itemView, 2);
             } else if ("休息视频".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_movie));
+                setOnClick(holder.itemView, 2);
             } else if ("拓展资源".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_source));
+                setOnClick(holder.itemView, 2);
             } else if ("瞎推荐".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_xia));
+                setOnClick(holder.itemView, 2);
             } else if ("前端".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_qian));
+                setOnClick(holder.itemView, 2);
             } else if ("App".equals(title)) {
                 ((TitleHolder) holder).mTitleImage.setImageDrawable(CommonUtils.getDrawable(R.drawable.home_title_app));
+                setOnClick(holder.itemView, 2);
             }
         } else if (getItemViewType(position) == TYPE_ONE) {
             String type = mItemBeanList.get(dataPosition).get(0).getType();
@@ -195,11 +206,26 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
+    /**
+     * 用于打开相应的 webActivity
+     */
     private void setOnClick(LinearLayout linearLayout, final ItemBean itemBean) {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WebViewActivity.loadUrl(v.getContext(), itemBean.getUrl(), "加载中...");
+            }
+        });
+    }
+
+    /**
+     * 用于点击更多跳转到其他 Fragment
+     */
+    private void setOnClick(View titleView, final int position) {
+        titleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecommendFragment.jumpGankFragment(position);
             }
         });
     }

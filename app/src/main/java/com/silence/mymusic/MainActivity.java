@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
+    private GankFragment mGankFragment;
+    private MovieFragment mMovieFragment;
+    private BookFragment mBookFragment;
 
     private Handler mHandler = new Handler();
     private boolean isRealyExit = false;
@@ -59,9 +62,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initContentFragment() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new GankFragment());
-        fragmentList.add(new MovieFragment());
-        fragmentList.add(new BookFragment());
+        mGankFragment = new GankFragment();
+        mMovieFragment = new MovieFragment();
+        mBookFragment = new BookFragment();
+        fragmentList.add(mGankFragment);
+        fragmentList.add(mMovieFragment);
+        fragmentList.add(mBookFragment);
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),fragmentList);
         mViewPager.setAdapter(adapter);
         // 设置ViewPager最大缓存的页面个数(cpu消耗少)
