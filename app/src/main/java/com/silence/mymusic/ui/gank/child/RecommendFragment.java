@@ -6,7 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.silence.mymusic.R;
 import com.silence.mymusic.adapter.RecommendRecycleViewAdapter;
@@ -14,6 +17,7 @@ import com.silence.mymusic.base.BaseFragment;
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
 import com.silence.mymusic.bean.ItemBean;
+import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.BannerImageLoader;
 import com.silence.mymusic.utils.DebugUtil;
 import com.silence.mymusic.utils.ImgLoadUtil;
@@ -36,9 +40,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecommendFragment extends BaseFragment {
 
+    private static final String URL_FREE_READ = "https://gank.io/xiandu";
+
     private RecyclerView mRecyclerView;
     private LinearLayout mLoadingLayout;
     private View mHeaderView;
+    private ImageButton mButtonFreeRead, mButtonMovieHot;
+    private ImageView mButtonDaily;
+    private TextView mTextDaily;
     private Banner mBanner;
     private RecommendRecycleViewAdapter mRecycleViewAdapter;
     private boolean mIsPrepared = false;
@@ -80,17 +89,32 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void initRecycleView() {
+        initHeader();
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycle_recommend);
         mLoadingLayout = (LinearLayout) getView().findViewById(R.id.layout_loading);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         List<List<ItemBean>> items = new ArrayList<>(0);
         mRecycleViewAdapter = new RecommendRecycleViewAdapter(items);
-        mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null);
         mRecycleViewAdapter.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
         showRecommendLoading(false);
         showContentView();
+    }
+
+    private void initHeader() {
+        mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.recommend_header, null);
+        mButtonFreeRead = (ImageButton) mHeaderView.findViewById(R.id.button_free_read);
+        mButtonDaily = (ImageView) mHeaderView.findViewById(R.id.button_daily);
+        mButtonMovieHot = (ImageButton) mHeaderView.findViewById(R.id.button_movie_hot);
+        mTextDaily = (TextView) mHeaderView.findViewById(R.id.text_daily);
+        mButtonMovieHot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebViewActivity.loadUrl(getContext(), URL_FREE_READ,"加载中...");
+            }
+        });
+
     }
 
     private void showRecommendLoading(boolean isLoading) {

@@ -27,6 +27,7 @@ public class GankFragment extends BaseFragment {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private MyFragmentPagerAdapter mPagerAdapter;
 
     @Override
     public int setContent() {
@@ -42,12 +43,12 @@ public class GankFragment extends BaseFragment {
         showLoading();
         initFragmentList();
 
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager(),
+        mPagerAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(),
                 mFragmentList, mTitleList);
-        mViewPager.setAdapter(adapter);
+        mViewPager.setAdapter(mPagerAdapter);
         // 左右预加载页面的个数
         mViewPager.setOffscreenPageLimit(3);
-        adapter.notifyDataSetChanged();
+        mPagerAdapter.notifyDataSetChanged();
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setupWithViewPager(mViewPager);
         showContentView();
@@ -62,5 +63,9 @@ public class GankFragment extends BaseFragment {
         mFragmentList.add(new WelfareFragment());
         mFragmentList.add(new CustomFragment());
         mFragmentList.add(new AndroidFragment());
+    }
+
+    public void jumpFragment(int position) {
+        mViewPager.setCurrentItem(position, true);
     }
 }
