@@ -60,10 +60,10 @@ public class RecommendFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initRecycleView();
-//        mIsPrepared = true;
 //        loadData();
         loadBanner();
         showData();
+//        mIsPrepared = true;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class RecommendFragment extends BaseFragment {
         mRecycleViewAdapter = new RecommendRecycleViewAdapter(this, items);
         mRecycleViewAdapter.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mRecycleViewAdapter);
-        showRecommendLoading(false);
+        showRecommendLoading(true);
         showContentView();
     }
 

@@ -33,17 +33,26 @@ public class AndroidFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private int mLastVisibleItem;  //用于上拉刷新
     private int mPage = 1;
+    private boolean mIsPrepared = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        loadAndroidData();
+//        loadAndroidData();
     }
 
     @Override
     public int setContent() {
         return R.layout.fragment_android;
+    }
+
+    @Override
+    protected void loadData() {
+        super.loadData();
+        if (!mIsVisible || !mIsPrepared) {
+            loadAndroidData();
+        }
     }
 
     @Override

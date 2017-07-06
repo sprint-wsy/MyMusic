@@ -44,17 +44,26 @@ public class CustomFragment extends BaseFragment {
     private String mType = "all";
     private LinearLayoutManager mLayoutManager;
     private int mLastVisibleItem;  //用于上拉刷新
+    private boolean mIsPrepared = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        loadCustomData(false);
+//        loadCustomData(false);
     }
 
     @Override
     public int setContent() {
         return R.layout.fragment_custom;
+    }
+
+    @Override
+    protected void loadData() {
+        super.loadData();
+        if (!mIsVisible || !mIsPrepared) {
+            loadCustomData(false);
+        }
     }
 
     @Override

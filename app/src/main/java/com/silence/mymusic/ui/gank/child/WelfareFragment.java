@@ -37,11 +37,22 @@ public class WelfareFragment extends BaseFragment {
     private List<GankIoDataBean.ResultBean> mDataList;
     private int mPage = 1;
     private int mLastVisibleItem;
+    private boolean mIsPrepared = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+//        loadWelfareData();
+        mIsPrepared = true;
+    }
+
+    @Override
+    protected void loadData() {
+        super.loadData();
+        if (!mIsVisible || !mIsPrepared) {
+            return;
+        }
         loadWelfareData();
     }
 
