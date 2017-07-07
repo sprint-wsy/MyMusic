@@ -33,7 +33,7 @@ public class AndroidFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private int mLastVisibleItem;  //用于上拉刷新
     private int mPage = 1;
-    private boolean mIsPrepared = false;
+    private boolean mIsPrepared = false, mIsFirst = true;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class AndroidFragment extends BaseFragment {
     @Override
     protected void loadData() {
         super.loadData();
-        if (!mIsVisible || !mIsPrepared) {
+        if (!mIsVisible || !mIsPrepared || !mIsFirst) {
             return;
         }
         loadAndroidData();
@@ -99,6 +99,7 @@ public class AndroidFragment extends BaseFragment {
             public void onResponse(Call<GankIoDataBean> call, Response<GankIoDataBean> response) {
                 mAdapter.addData(response.body().getResults());
                 showContentView();
+                mIsFirst = false;
             }
 
             @Override

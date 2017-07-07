@@ -71,6 +71,7 @@ public class RecommendFragment extends BaseFragment {
         return R.layout.fragment_recommend;
     }
 
+//主界面第一个显示界面，不使用懒加载
 //    @Override
 //    protected void loadData() {
 //        super.loadData();

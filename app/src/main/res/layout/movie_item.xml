@@ -114,19 +114,12 @@
 
     </LinearLayout>
 
-    <!--<SeekBar-->
-    <!--android:id="@+id/pb_rate"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="5dp"-->
-    <!--android:background="@color/colorPageBg"-->
-    <!--android:max="10" />-->
-
     <View
         android:id="@+id/view_color"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="112dp"
         android:layout_marginTop="5dp"
-        android:background="@color/colorPageBg" />
+        android:background="@color/colorLineDeep" />
 
 </LinearLayout>

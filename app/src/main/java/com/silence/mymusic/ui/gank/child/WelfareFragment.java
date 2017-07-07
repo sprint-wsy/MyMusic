@@ -37,7 +37,7 @@ public class WelfareFragment extends BaseFragment {
     private List<GankIoDataBean.ResultBean> mDataList;
     private int mPage = 1;
     private int mLastVisibleItem;
-    private boolean mIsPrepared = false;
+    private boolean mIsPrepared = false, mIsFirst = true;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -50,9 +50,10 @@ public class WelfareFragment extends BaseFragment {
     @Override
     protected void loadData() {
         super.loadData();
-        if (!mIsVisible || !mIsPrepared) {
+        if (!mIsVisible || !mIsPrepared || !mIsFirst) {
             return;
         }
+        DebugUtil.i("welfare load data");
         loadWelfareData();
     }
 
@@ -105,6 +106,7 @@ public class WelfareFragment extends BaseFragment {
                 List<GankIoDataBean.ResultBean> list = response.body().getResults();
                 mRecycleViewAdapter.addData(list);
                 showContentView();
+                mIsFirst = false;
             }
 
             @Override

@@ -44,7 +44,7 @@ public class CustomFragment extends BaseFragment {
     private String mType = "all";
     private LinearLayoutManager mLayoutManager;
     private int mLastVisibleItem;  //用于上拉刷新
-    private boolean mIsPrepared = false;
+    private boolean mIsPrepared = false, mIsFirst = true;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class CustomFragment extends BaseFragment {
     @Override
     protected void loadData() {
         super.loadData();
-        if (!mIsVisible || !mIsPrepared) {
+        if (!mIsVisible || !mIsPrepared || !mIsFirst) {
             return;
         }
         loadCustomData(false);
@@ -158,6 +158,7 @@ public class CustomFragment extends BaseFragment {
                     mAdapter.setData(response.body().getResults());
                 }
                 showContentView();
+                mIsFirst = false;
             }
 
             @Override
