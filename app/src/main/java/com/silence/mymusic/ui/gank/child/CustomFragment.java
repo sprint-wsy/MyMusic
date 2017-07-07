@@ -51,6 +51,7 @@ public class CustomFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
 //        loadCustomData(false);
+        mIsPrepared = true;
     }
 
     @Override
@@ -62,8 +63,9 @@ public class CustomFragment extends BaseFragment {
     protected void loadData() {
         super.loadData();
         if (!mIsVisible || !mIsPrepared) {
-            loadCustomData(false);
+            return;
         }
+        loadCustomData(false);
     }
 
     @Override

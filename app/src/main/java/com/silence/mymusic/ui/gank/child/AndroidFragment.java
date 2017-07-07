@@ -40,6 +40,7 @@ public class AndroidFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
 //        loadAndroidData();
+        mIsPrepared = true;
     }
 
     @Override
@@ -51,8 +52,9 @@ public class AndroidFragment extends BaseFragment {
     protected void loadData() {
         super.loadData();
         if (!mIsVisible || !mIsPrepared) {
-            loadAndroidData();
+            return;
         }
+        loadAndroidData();
     }
 
     @Override

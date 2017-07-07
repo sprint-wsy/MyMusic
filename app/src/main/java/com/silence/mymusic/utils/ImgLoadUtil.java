@@ -90,6 +90,31 @@ public class ImgLoadUtil {
                 .into(imageView);
     }
 
+    /**
+     * 书籍、妹子图、电影列表图
+     * 默认图区别
+     */
+    public static void displayEspImage(String url, ImageView imageView, int type) {
+        Glide.with(imageView.getContext())
+                .load(url)
+                .crossFade(500)
+                .placeholder(getDefaultEspPic(type))
+                .error(getDefaultEspPic(type))
+                .into(imageView);
+    }
+
+    private static int getDefaultEspPic(int type) {
+        switch (type) {
+            case 0:// 电影
+                return R.drawable.img_default_movie;
+            case 1:// 妹子
+                return R.drawable.img_default_meizi;
+            case 2:// 书籍
+                return R.drawable.img_default_book;
+        }
+        return R.drawable.img_default_meizi;
+    }
+
     private static int getDefaultPic(int imgNumber) {
         switch (imgNumber) {
             case 1:
