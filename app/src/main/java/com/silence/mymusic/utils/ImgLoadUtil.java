@@ -60,6 +60,10 @@ public class ImgLoadUtil {
         Glide.with(context).load(resId).into(imageView);
     }
 
+    public static void CommonLoadImage(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url).into(imageView);
+    }
+
     public static void displayRandom(int imgNumber, ImageView imageView) {
         Glide.with(imageView.getContext())
                 .load(getRandomPic(imgNumber))

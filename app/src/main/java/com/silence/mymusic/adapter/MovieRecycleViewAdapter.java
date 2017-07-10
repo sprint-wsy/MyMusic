@@ -1,6 +1,7 @@
 package com.silence.mymusic.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.silence.mymusic.R;
 import com.silence.mymusic.bean.movie.SubjectsBean;
+import com.silence.mymusic.ui.movie.MovieDetailActivity;
 import com.silence.mymusic.utils.ImgLoadUtil;
 import com.silence.mymusic.utils.StringFormatUtil;
 
@@ -60,7 +62,7 @@ public class MovieRecycleViewAdapter extends RecyclerView.Adapter<MovieRecycleVi
     }
 
     @Override
-    public void onBindViewHolder(MovieHolder holder, int position) {
+    public void onBindViewHolder(final MovieHolder holder, int position) {
         if (getItemViewType(position) == TYPE_HEADER) {
             return;
         }
@@ -68,13 +70,19 @@ public class MovieRecycleViewAdapter extends RecyclerView.Adapter<MovieRecycleVi
         if (mHeader != null) {
             dataPosition --;
         }
-        SubjectsBean data = mData.get(dataPosition);
+        final SubjectsBean data = mData.get(dataPosition);
         ImgLoadUtil.displayEspImage(data.getImages().getLarge(), holder.mImageMovie, 0);
         holder.mTextTitle.setText(data.getTitle());
         holder.mTextDirectors.setText(StringFormatUtil.formatName(data.getDirectors()));
         holder.mTextCasts.setText(StringFormatUtil.formatName(data.getCasts()));
         holder.mTextGenres.setText("类型：" + StringFormatUtil.formatGenres(data.getGenres()));
         holder.mTextGenres.setText("评分：" + data.getRating().getAverage());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MovieDetailActivity.start(mContext, data, holder.mImageMovie);
+            }
+        });
     }
 
 

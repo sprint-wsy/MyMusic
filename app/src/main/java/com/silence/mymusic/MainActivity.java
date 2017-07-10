@@ -5,6 +5,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -51,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mImageGank = (ImageView) findViewById(R.id.image_title_gank);
         mImageOne = (ImageView) findViewById(R.id.image_title_one);
         mImageDou = (ImageView) findViewById(R.id.image_title_dou);
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
     }
 
     private void initListener() {

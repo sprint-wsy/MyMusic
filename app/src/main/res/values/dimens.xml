@@ -23,4 +23,6 @@
     <!--书籍详情图片的宽高-->
     <dimen name="book_detail_width">120dp</dimen>
     <dimen name="book_detail_height">165dp</dimen>
+
+    <dimen name="toolbar_padding_top">25dp</dimen>
 </resources>

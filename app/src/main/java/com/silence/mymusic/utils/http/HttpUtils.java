@@ -3,6 +3,7 @@ package com.silence.mymusic.utils.http;
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
 import com.silence.mymusic.bean.movie.HotMovieBean;
+import com.silence.mymusic.bean.movie.MovieDetailBean;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -55,6 +56,11 @@ public class HttpUtils {
 
     public Call<HotMovieBean> getHotMovie() {
         Call<HotMovieBean> call = sDoubanRetrofitClient.getHotMovie();
+        return call;
+    }
+
+    public Call<MovieDetailBean> getMovieDetail(String id) {
+        Call<MovieDetailBean> call = sDoubanRetrofitClient.getMovieDetail(id);
         return call;
     }
 

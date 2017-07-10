@@ -1,12 +1,15 @@
 package com.silence.mymusic.bean.movie;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by wushiyu on 2017/7/6.
  */
 
-public class SubjectsBean {
+public class SubjectsBean implements Parcelable{
     /**
      * rating : {"max":10,"average":6.9,"stars":"35","min":0}
      * genres : ["剧情","喜剧"]
@@ -33,6 +36,33 @@ public class SubjectsBean {
     private List<String> genres;
     private List<PersonBean> casts;
     private List<PersonBean> directors;
+
+    protected SubjectsBean(Parcel in) {
+        rating = in.readParcelable(RatingBean.class.getClassLoader());
+        title = in.readString();
+        collect_count = in.readInt();
+        original_title = in.readString();
+        subtype = in.readString();
+        year = in.readString();
+        images = in.readParcelable(ImageBean.class.getClassLoader());
+        alt = in.readString();
+        id = in.readString();
+        genres = in.createStringArrayList();
+        casts = in.createTypedArrayList(PersonBean.CREATOR);
+        directors = in.createTypedArrayList(PersonBean.CREATOR);
+    }
+
+    public static final Creator<SubjectsBean> CREATOR = new Creator<SubjectsBean>() {
+        @Override
+        public SubjectsBean createFromParcel(Parcel in) {
+            return new SubjectsBean(in);
+        }
+
+        @Override
+        public SubjectsBean[] newArray(int size) {
+            return new SubjectsBean[size];
+        }
+    };
 
     public RatingBean getRating() {
         return rating;
@@ -146,5 +176,26 @@ public class SubjectsBean {
                 ", title='" + title + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(rating, flags);
+        dest.writeString(title);
+        dest.writeInt(collect_count);
+        dest.writeString(original_title);
+        dest.writeString(subtype);
+        dest.writeString(year);
+        dest.writeParcelable(images, flags);
+        dest.writeString(alt);
+        dest.writeString(id);
+        dest.writeStringList(genres);
+        dest.writeTypedList(casts);
+        dest.writeTypedList(directors);
     }
 }

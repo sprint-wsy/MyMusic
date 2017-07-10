@@ -33,6 +33,10 @@
         <activity
             android:name=".ui.gank.BigImageActivity"
             android:theme="@style/ViewBigPicTheme"/>
+
+        <activity
+            android:name=".ui.movie.MovieDetailActivity"
+            android:theme="@style/MyScrollPage"/>
     </application>
 
 </manifest>
