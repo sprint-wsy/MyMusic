@@ -37,6 +37,8 @@
         <activity
             android:name=".ui.movie.MovieDetailActivity"
             android:theme="@style/MyScrollPage"/>
+
+        <activity android:name=".ui.movie.DoubanTopActivity"/>
     </application>
 
 </manifest>

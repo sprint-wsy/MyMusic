@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.silence.mymusic.R;
+import com.silence.mymusic.ui.movie.DoubanTopActivity;
 import com.silence.mymusic.bean.movie.SubjectsBean;
 import com.silence.mymusic.ui.movie.MovieDetailActivity;
 import com.silence.mymusic.utils.ImgLoadUtil;
@@ -64,6 +65,12 @@ public class MovieRecycleViewAdapter extends RecyclerView.Adapter<MovieRecycleVi
     @Override
     public void onBindViewHolder(final MovieHolder holder, int position) {
         if (getItemViewType(position) == TYPE_HEADER) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(new Intent(mContext, DoubanTopActivity.class));
+                }
+            });
             return;
         }
         int dataPosition = position;

@@ -64,4 +64,9 @@ public class HttpUtils {
         return call;
     }
 
+    public Call<HotMovieBean> getDoubanTop(int start, int count) {
+        Call<HotMovieBean> call = sDoubanRetrofitClient.getMovieTop250(start, count);
+        return call;
+    }
+
 }
