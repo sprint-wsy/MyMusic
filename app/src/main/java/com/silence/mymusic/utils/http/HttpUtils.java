@@ -2,6 +2,8 @@ package com.silence.mymusic.utils.http;
 
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
+import com.silence.mymusic.bean.book.BookDetailBean;
+import com.silence.mymusic.bean.book.BookListBean;
 import com.silence.mymusic.bean.movie.HotMovieBean;
 import com.silence.mymusic.bean.movie.MovieDetailBean;
 
@@ -66,6 +68,16 @@ public class HttpUtils {
 
     public Call<HotMovieBean> getDoubanTop(int start, int count) {
         Call<HotMovieBean> call = sDoubanRetrofitClient.getMovieTop250(start, count);
+        return call;
+    }
+
+    public Call<BookListBean> getBook(String tag, int start, int count) {
+        Call<BookListBean> call = sDoubanRetrofitClient.getBook(tag, start, count);
+        return call;
+    }
+
+    public Call<BookDetailBean> getBookDetail(String id) {
+        Call<BookDetailBean> call = sDoubanRetrofitClient.getBookDetail(id);
         return call;
     }
 

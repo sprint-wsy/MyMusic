@@ -2,6 +2,8 @@ package com.silence.mymusic.utils.http;
 
 import com.silence.mymusic.bean.GankIoDataBean;
 import com.silence.mymusic.bean.GankIoDayBean;
+import com.silence.mymusic.bean.book.BookDetailBean;
+import com.silence.mymusic.bean.book.BookListBean;
 import com.silence.mymusic.bean.movie.HotMovieBean;
 import com.silence.mymusic.bean.movie.MovieDetailBean;
 
@@ -53,4 +55,20 @@ public interface RetrofitClient {
      */
     @GET("v2/movie/top250")
     Call<HotMovieBean> getMovieTop250(@Query("start") int start, @Query("count") int count);
+
+    /**
+     * 根据tag获取图书
+     *
+     * @param tag   搜索关键字
+     * @param count 一次请求的数目 最多100
+     */
+    @GET("v2/book/search")
+    Call<BookListBean> getBook(@Query("tag") String tag, @Query("start") int start, @Query("count") int count);
+
+    /**
+     * 根据 id 获取书籍详情
+     * @param id  书籍id
+     */
+    @GET("v2/book/{id}")
+    Call<BookDetailBean> getBookDetail(@Path("id") String id);
 }
