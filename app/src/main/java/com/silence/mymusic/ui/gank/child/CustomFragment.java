@@ -135,6 +135,7 @@ public class CustomFragment extends BaseFragment {
                         }
                         dialog.dismiss();
                         showLoading();
+                        mPage = 1;
                         loadCustomData(false);
                     }
                 })
