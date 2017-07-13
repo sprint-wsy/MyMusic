@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.silence.mymusic.R;
 import com.silence.mymusic.bean.book.BookBean;
+import com.silence.mymusic.ui.book.BookDetailActivity;
 import com.silence.mymusic.utils.ImgLoadUtil;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookHolder>{
     }
 
     @Override
-    public void onBindViewHolder(BookHolder holder, int position) {
+    public void onBindViewHolder(final BookHolder holder, int position) {
         if (getItemViewType(position) == TYPE_FOOTER) {
             return;
         }
@@ -88,7 +89,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                BookDetailActivity.start(mContext, data, holder.mImageView);
             }
         });
     }
