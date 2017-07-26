@@ -3,12 +3,15 @@ package com.silence.mymusic;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initListener();
         initContentFragment();
+        initDrawerLayout();
     }
 
     private void initView() {
@@ -83,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setCurrentItem(0);
     }
 
+    private void initDrawerLayout() {
+        mNavigationView.inflateHeaderView(R.layout.nav_header_main);
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -111,9 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mViewPager.setCurrentItem(2);
                 }
                 break;
-
+            case R.id.image_title_menu:
+                mDrawerLayout.openDrawer(GravityCompat.START);
         }
 
+    }
+
+    public void jumpFragment(int position) {
+        mViewPager.setCurrentItem(position);
     }
 
     @Override
@@ -150,6 +163,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (isRealyExit) {
             finish();
@@ -163,6 +192,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }, 3000);
         }
-
     }
 }

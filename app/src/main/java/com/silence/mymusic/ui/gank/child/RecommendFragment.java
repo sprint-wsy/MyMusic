@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.silence.mymusic.MainActivity;
 import com.silence.mymusic.R;
 import com.silence.mymusic.adapter.RecommendRecycleViewAdapter;
 import com.silence.mymusic.base.BaseFragment;
@@ -122,6 +123,12 @@ public class RecommendFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 jumpGankFragment(2);
+            }
+        });
+        mButtonMovieHot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).jumpFragment(1);
             }
         });
     }
