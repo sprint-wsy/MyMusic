@@ -164,7 +164,7 @@ public class RecommendFragment extends BaseFragment {
     }
 
     private void showData() {
-        Call<GankIoDayBean> call1 = HttpUtils.getInstance().getGankIoDay("2017", "06", "09");
+        Call<GankIoDayBean> call1 = HttpUtils.getInstance().getGankIoDay("2017", "07", "10");
         call1.enqueue(new Callback<GankIoDayBean>() {
             @Override
             public void onResponse(Call<GankIoDayBean> call, Response<GankIoDayBean> response) {

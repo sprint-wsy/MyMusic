@@ -14,11 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.silence.mymusic.adapter.MyFragmentPagerAdapter;
 import com.silence.mymusic.ui.book.BookFragment;
 import com.silence.mymusic.ui.gank.GankFragment;
+import com.silence.mymusic.ui.menu.NavAboutActivity;
 import com.silence.mymusic.ui.movie.MovieFragment;
+import com.silence.mymusic.ui.webview.WebViewActivity;
 import com.silence.mymusic.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -89,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initDrawerLayout() {
         mNavigationView.inflateHeaderView(R.layout.nav_header_main);
+        View headerView = mNavigationView.getHeaderView(0);
+        LinearLayout layoutHomepage = (LinearLayout) headerView.findViewById(R.id.layout_nav_homepage);
+        LinearLayout layoutAbout = (LinearLayout) headerView.findViewById(R.id.layout_nav_about);
+        layoutHomepage.setOnClickListener(this);
+        layoutAbout.setOnClickListener(this);
     }
 
     @Override
@@ -121,6 +129,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.image_title_menu:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.layout_nav_homepage:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                WebViewActivity.loadUrl(this, "https://github.com/sprint-wsy/MyMusic", "加载中...");
+                break;
+            case R.id.layout_nav_about:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                NavAboutActivity.start(this);
+                break;
         }
 
     }
@@ -180,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
         if (isRealyExit) {
             finish();
         } else {

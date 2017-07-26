@@ -42,6 +42,8 @@
 
         <activity android:name=".ui.book.BookDetailActivity"
                   android:theme="@style/MyScrollPage"/>
+
+        <activity android:name=".ui.menu.NavAboutActivity" />
     </application>
 
 </manifest>
