@@ -81,12 +81,14 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BookDetailBean> call, Response<BookDetailBean> response) {
                 BookDetailBean data = response.body();
-                mTextPubdata.setText(data.getPubdate());
-                mTextPublisher.setText("出版社：" + data.getPublisher());
-                mTextAuthorIntro.setText(data.getAuthor_intro());
-                mTextSummary.setText(data.getSummary());
-                mTextCatelog.setText(data.getCatalog());
-                mMoreUrl = data.getAlt();
+                if (data != null) {
+                    mTextPubdata.setText(data.getPubdate());
+                    mTextPublisher.setText("出版社：" + data.getPublisher());
+                    mTextAuthorIntro.setText(data.getAuthor_intro());
+                    mTextSummary.setText(data.getSummary());
+                    mTextCatelog.setText(data.getCatalog());
+                    mMoreUrl = data.getAlt();
+                }
             }
 
             @Override

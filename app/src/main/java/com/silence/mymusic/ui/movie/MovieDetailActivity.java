@@ -83,12 +83,14 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MovieDetailBean> call, Response<MovieDetailBean> response) {
                 MovieDetailBean data = response.body();
-                mTextDay.setText("上映日期：" + data.getYear());
-                mTextCity.setText("制片国家/地区：" + StringFormatUtil.formatGenres(data.getCountries()));
-                mTextAnotherTitle.setText(StringFormatUtil.formatGenres(data.getAka()));
-                mTextSummary.setText(data.getSummary());
-                mMoreUrl = data.getMobile_url();
-                setPersonList(data);
+                if (data != null) {
+                    mTextDay.setText("上映日期：" + data.getYear());
+                    mTextCity.setText("制片国家/地区：" + StringFormatUtil.formatGenres(data.getCountries()));
+                    mTextAnotherTitle.setText(StringFormatUtil.formatGenres(data.getAka()));
+                    mTextSummary.setText(data.getSummary());
+                    mMoreUrl = data.getMobile_url();
+                    setPersonList(data);
+                }
             }
 
             @Override
